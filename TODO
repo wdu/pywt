@@ -1,0 +1,19 @@
+Known issues:
+- somehow code is generated that may delete WEnvironment; a quickfix is
+  to change WEnvironment form protected to public, but that is obviously
+  wrong
+- the correctness of the introspection tool has not been verified. Most
+  likely some methods that are part of the public API are not properly
+  annotated. A known example are methods with preprocessor-conditional
+  documentation.
+- not all subdirectories of the Wt source tree are handled (only chart and
+  http).
+- the patchClasses.py may eliminate functionality that is currently
+  problematic but that we do want to have available in PyWt.
+- treeviewdragdrop example: when showing the 2nd level WMenu for right-click
+  on a folder item, the 2nd level does not disappear.
+- the bindinds have not been investigated for memory leaks or other memory
+  problems. The memory management for some classes' bindings may have to be
+  improved.
+- when using a recursive event loop, all other sessions hang
+

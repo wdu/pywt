@@ -1,0 +1,1635 @@
+// This may look like C code, but it's really -*- C++ -*-
+/*
+ * Copyright (C) 2013 Emweb bvba, Belgium.
+ *
+ * See the LICENSE file for terms of use.
+ */
+
+#define ARGS_0_0D_CHECK(fname, aname) \
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+
+
+#define ARGS_0_0D_CONV(fname, aname) \
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_0_0D(fname, aname) \
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname)) {\
+		throw PyException();\
+	} \
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_1_0D_CHECK(fname, aname, t1) \
+	PyObject* a1p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_1_0D_CONV(fname, aname, t1) \
+	Arg< t1 > a1c(a1p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_1_0D(fname, aname, t1) \
+	PyObject* a1p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_1_1D_CHECK(fname, aname, t1) \
+	PyObject* a1p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		(a1p && !Python2C<t1>::acceptarg(a1p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_1_1D_CONV(fname, aname, t1, a1d) \
+	Arg< t1 > a1c(a1p, a1d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_1_1D(fname, aname, t1, a1d) \
+	PyObject* a1p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p, a1d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_2_0D_CHECK(fname, aname, t1, t2) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_2_0D_CONV(fname, aname, t1, t2) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_2_0D(fname, aname, t1, t2) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_2_1D_CHECK(fname, aname, t1, t2) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_2_1D_CONV(fname, aname, t1, t2, a2d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_2_1D(fname, aname, t1, t2, a2d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_2_2D_CHECK(fname, aname, t1, t2) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		(a1p && !Python2C<t1>::acceptarg(a1p)) ||\
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_2_2D_CONV(fname, aname, t1, t2, a1d, a2d) \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_2_2D(fname, aname, t1, t2, a1d, a2d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_3_0D_CHECK(fname, aname, t1, t2, t3) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_3_0D_CONV(fname, aname, t1, t2, t3) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_3_0D(fname, aname, t1, t2, t3) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_3_1D_CHECK(fname, aname, t1, t2, t3) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_3_1D_CONV(fname, aname, t1, t2, t3, a3d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p, a3d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_3_1D(fname, aname, t1, t2, t3, a3d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p, a3d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_3_2D_CHECK(fname, aname, t1, t2, t3) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_3_2D_CONV(fname, aname, t1, t2, t3, a2d, a3d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_3_2D(fname, aname, t1, t2, t3, a2d, a3d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_3_3D_CHECK(fname, aname, t1, t2, t3) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		(a1p && !Python2C<t1>::acceptarg(a1p)) ||\
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_3_3D_CONV(fname, aname, t1, t2, t3, a1d, a2d, a3d) \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_3_3D(fname, aname, t1, t2, t3, a1d, a2d, a3d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_4_0D_CHECK(fname, aname, t1, t2, t3, t4) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		!Python2C<t4>::acceptarg(a4p) || \
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_4_0D_CONV(fname, aname, t1, t2, t3, t4) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_4_0D(fname, aname, t1, t2, t3, t4) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_4_1D_CHECK(fname, aname, t1, t2, t3, t4) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_4_1D_CONV(fname, aname, t1, t2, t3, t4, a4d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p, a4d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_4_1D(fname, aname, t1, t2, t3, t4, a4d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p, a4d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_4_2D_CHECK(fname, aname, t1, t2, t3, t4) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_4_2D_CONV(fname, aname, t1, t2, t3, t4, a3d, a4d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_4_2D(fname, aname, t1, t2, t3, t4, a3d, a4d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_4_3D_CHECK(fname, aname, t1, t2, t3, t4) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_4_3D_CONV(fname, aname, t1, t2, t3, t4, a2d, a3d, a4d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_4_3D(fname, aname, t1, t2, t3, t4, a2d, a3d, a4d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_4_4D_CHECK(fname, aname, t1, t2, t3, t4) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		(a1p && !Python2C<t1>::acceptarg(a1p)) ||\
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_4_4D_CONV(fname, aname, t1, t2, t3, t4, a1d, a2d, a3d, a4d) \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_4_4D(fname, aname, t1, t2, t3, t4, a1d, a2d, a3d, a4d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_0D_CHECK(fname, aname, t1, t2, t3, t4, t5) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		!Python2C<t4>::acceptarg(a4p) || \
+		!Python2C<t5>::acceptarg(a5p) || \
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_5_0D_CONV(fname, aname, t1, t2, t3, t4, t5) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_0D(fname, aname, t1, t2, t3, t4, t5) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_1D_CHECK(fname, aname, t1, t2, t3, t4, t5) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		!Python2C<t4>::acceptarg(a4p) || \
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_5_1D_CONV(fname, aname, t1, t2, t3, t4, t5, a5d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p, a5d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_1D(fname, aname, t1, t2, t3, t4, t5, a5d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p, a5d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_2D_CHECK(fname, aname, t1, t2, t3, t4, t5) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_5_2D_CONV(fname, aname, t1, t2, t3, t4, t5, a4d, a5d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_2D(fname, aname, t1, t2, t3, t4, t5, a4d, a5d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_3D_CHECK(fname, aname, t1, t2, t3, t4, t5) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_5_3D_CONV(fname, aname, t1, t2, t3, t4, t5, a3d, a4d, a5d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_3D(fname, aname, t1, t2, t3, t4, t5, a3d, a4d, a5d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_4D_CHECK(fname, aname, t1, t2, t3, t4, t5) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_5_4D_CONV(fname, aname, t1, t2, t3, t4, t5, a2d, a3d, a4d, a5d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_4D(fname, aname, t1, t2, t3, t4, t5, a2d, a3d, a4d, a5d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_5D_CHECK(fname, aname, t1, t2, t3, t4, t5) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		(a1p && !Python2C<t1>::acceptarg(a1p)) ||\
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_5_5D_CONV(fname, aname, t1, t2, t3, t4, t5, a1d, a2d, a3d, a4d, a5d) \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_5_5D(fname, aname, t1, t2, t3, t4, t5, a1d, a2d, a3d, a4d, a5d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_0D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		!Python2C<t4>::acceptarg(a4p) || \
+		!Python2C<t5>::acceptarg(a5p) || \
+		!Python2C<t6>::acceptarg(a6p) || \
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_6_0D_CONV(fname, aname, t1, t2, t3, t4, t5, t6) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	Arg< t6 > a6c(a6p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_0D(fname, aname, t1, t2, t3, t4, t5, t6) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	Arg< t6 > a6c(a6p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_1D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		!Python2C<t4>::acceptarg(a4p) || \
+		!Python2C<t5>::acceptarg(a5p) || \
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_6_1D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, a6d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_1D(fname, aname, t1, t2, t3, t4, t5, t6, a6d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_2D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		!Python2C<t4>::acceptarg(a4p) || \
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_6_2D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, a5d, a6d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_2D(fname, aname, t1, t2, t3, t4, t5, t6, a5d, a6d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_3D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_6_3D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, a4d, a5d, a6d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_3D(fname, aname, t1, t2, t3, t4, t5, t6, a4d, a5d, a6d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_4D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_6_4D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, a3d, a4d, a5d, a6d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_4D(fname, aname, t1, t2, t3, t4, t5, t6, a3d, a4d, a5d, a6d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_5D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_6_5D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, a2d, a3d, a4d, a5d, a6d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_5D(fname, aname, t1, t2, t3, t4, t5, t6, a2d, a3d, a4d, a5d, a6d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_6D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		(a1p && !Python2C<t1>::acceptarg(a1p)) ||\
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_6_6D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, a1d, a2d, a3d, a4d, a5d, a6d) \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_6_6D(fname, aname, t1, t2, t3, t4, t5, t6, a1d, a2d, a3d, a4d, a5d, a6d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_0D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6, t7) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		!Python2C<t4>::acceptarg(a4p) || \
+		!Python2C<t5>::acceptarg(a5p) || \
+		!Python2C<t6>::acceptarg(a6p) || \
+		!Python2C<t7>::acceptarg(a7p) || \
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_7_0D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, t7) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	Arg< t6 > a6c(a6p);\
+	Arg< t7 > a7c(a7p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_0D(fname, aname, t1, t2, t3, t4, t5, t6, t7) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	Arg< t6 > a6c(a6p);\
+	Arg< t7 > a7c(a7p);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_1D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6, t7) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		!Python2C<t4>::acceptarg(a4p) || \
+		!Python2C<t5>::acceptarg(a5p) || \
+		!Python2C<t6>::acceptarg(a6p) || \
+		(a7p && !Python2C<t7>::acceptarg(a7p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_7_1D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, t7, a7d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	Arg< t6 > a6c(a6p);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_1D(fname, aname, t1, t2, t3, t4, t5, t6, t7, a7d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	Arg< t6 > a6c(a6p);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_2D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6, t7) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		!Python2C<t4>::acceptarg(a4p) || \
+		!Python2C<t5>::acceptarg(a5p) || \
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		(a7p && !Python2C<t7>::acceptarg(a7p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_7_2D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, t7, a6d, a7d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_2D(fname, aname, t1, t2, t3, t4, t5, t6, t7, a6d, a7d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_3D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6, t7) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		!Python2C<t4>::acceptarg(a4p) || \
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		(a7p && !Python2C<t7>::acceptarg(a7p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_7_3D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, t7, a5d, a6d, a7d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_3D(fname, aname, t1, t2, t3, t4, t5, t6, t7, a5d, a6d, a7d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_4D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6, t7) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		!Python2C<t3>::acceptarg(a3p) || \
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		(a7p && !Python2C<t7>::acceptarg(a7p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_7_4D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, t7, a4d, a5d, a6d, a7d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_4D(fname, aname, t1, t2, t3, t4, t5, t6, t7, a4d, a5d, a6d, a7d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_5D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6, t7) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		!Python2C<t2>::acceptarg(a2p) || \
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		(a7p && !Python2C<t7>::acceptarg(a7p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_7_5D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, t7, a3d, a4d, a5d, a6d, a7d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_5D(fname, aname, t1, t2, t3, t4, t5, t6, t7, a3d, a4d, a5d, a6d, a7d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_6D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6, t7) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		!Python2C<t1>::acceptarg(a1p) || \
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		(a7p && !Python2C<t7>::acceptarg(a7p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_7_6D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, t7, a2d, a3d, a4d, a5d, a6d, a7d) \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_6D(fname, aname, t1, t2, t3, t4, t5, t6, t7, a2d, a3d, a4d, a5d, a6d, a7d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_7D_CHECK(fname, aname, t1, t2, t3, t4, t5, t6, t7) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		PyErr_Clear();\
+		argsok = false;\
+	} \
+	if ((argsok) && (\
+		(a1p && !Python2C<t1>::acceptarg(a1p)) ||\
+		(a2p && !Python2C<t2>::acceptarg(a2p)) ||\
+		(a3p && !Python2C<t3>::acceptarg(a3p)) ||\
+		(a4p && !Python2C<t4>::acceptarg(a4p)) ||\
+		(a5p && !Python2C<t5>::acceptarg(a5p)) ||\
+		(a6p && !Python2C<t6>::acceptarg(a6p)) ||\
+		(a7p && !Python2C<t7>::acceptarg(a7p)) ||\
+		false)) {\
+		argsok = false;\
+	} \
+
+
+#define ARGS_7_7D_CONV(fname, aname, t1, t2, t3, t4, t5, t6, t7, a1d, a2d, a3d, a4d, a5d, a6d, a7d) \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+
+#define ARGS_7_7D(fname, aname, t1, t2, t3, t4, t5, t6, t7, a1d, a2d, a3d, a4d, a5d, a6d, a7d) \
+	PyObject* a1p = 0;\
+	PyObject* a2p = 0;\
+	PyObject* a3p = 0;\
+	PyObject* a4p = 0;\
+	PyObject* a5p = 0;\
+	PyObject* a6p = 0;\
+	PyObject* a7p = 0;\
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, fname, aname, &a1p, &a2p, &a3p, &a4p, &a5p, &a6p, &a7p)) {\
+		throw PyException();\
+	} \
+	Arg< t1 > a1c(a1p, a1d);\
+	Arg< t2 > a2c(a2p, a2d);\
+	Arg< t3 > a3c(a3p, a3d);\
+	Arg< t4 > a4c(a4p, a4d);\
+	Arg< t5 > a5c(a5p, a5d);\
+	Arg< t6 > a6c(a6p, a6d);\
+	Arg< t7 > a7c(a7p, a7d);\
+	if (PyErr_Occurred()) throw PyException();
+
+

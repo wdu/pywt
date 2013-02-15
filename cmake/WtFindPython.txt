@@ -1,0 +1,61 @@
+FIND_PACKAGE(PythonInterp)
+
+IF (PYTHON_EXECUTABLE)
+
+  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c
+    "from distutils.sysconfig import *; print get_python_lib()"
+    OUTPUT_VARIABLE PYTHON_INSTALL_DIR
+  )
+  STRING(REPLACE "\n" "" PYTHON_INSTALL_DIR "${PYTHON_INSTALL_DIR}")
+
+IF(WIN32)
+  FIND_PACKAGE(PythonLibs)
+ELSE(WIN32)
+  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c
+    "from distutils.sysconfig import *; print get_config_var('INCLUDEPY')"
+    OUTPUT_VARIABLE PYTHON_INC_DIR
+  )
+
+  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c
+  "from distutils.sysconfig import *; print get_config_var('LIBPL')"
+  OUTPUT_VARIABLE PYTHON_POSSIBLE_LIB_PATH
+  )
+
+  EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c
+    "from distutils.sysconfig import *; print get_config_var('LINKFORSHARED')"
+    OUTPUT_VARIABLE PYTHON_LFLAGS
+  )
+
+
+  # remove the new lines from the output by replacing them with empty strings
+  STRING(REPLACE "\n" "" PYTHON_INC_DIR "${PYTHON_INC_DIR}")
+  STRING(REPLACE "\n" "" PYTHON_POSSIBLE_LIB_PATH "${PYTHON_POSSIBLE_LIB_PATH}")
+  STRING(REPLACE "\n" "" PYTHON_LFLAGS "${PYTHON_LFLAGS}")
+
+  FIND_PATH(PYTHON_INCLUDE_PATH
+    NAMES Python.h
+    PATHS ${PYTHON_INC_DIR}
+  )
+
+  FIND_LIBRARY(PYTHON_LIBRARY
+    NAMES python python2.5 python2.6 python26
+    PATHS ${PYTHON_POSSIBLE_LIB_PATH}
+  )
+
+  IF (PYTHON_LIBRARY AND PYTHON_INCLUDE_PATH)
+    SET(PYTHON_FOUND TRUE)
+  ELSE (PYTHON_LIBRARY AND PYTHON_INCLUDE_PATH)
+    IF (NOT PYTHON_LIBRARY)
+      MESSAGE(FATAL_ERROR "** Could not find python library (e.g. libpython)")
+    ENDIF(NOT PYTHON_LIBRARY)
+    IF (NOT PYTHON_INCLUDE_PATH)
+      MESSAGE(FATAL_ERROR "** Could not find python development files (Python.h) in ${PYTHON_INC_DIR}")
+    ENDIF (NOT PYTHON_INCLUDE_PATH)
+  ENDIF(PYTHON_LIBRARY AND PYTHON_INCLUDE_PATH)
+ENDIF(WIN32)
+
+ELSE(PYTHON_EXECUTABLE)
+  MESSAGE(FATAL_ERROR "** Could not find python interpreter")
+ENDIF(PYTHON_EXECUTABLE)
+
+
