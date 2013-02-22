@@ -49,9 +49,10 @@ template class C2Python_ref< Wt::Signal< int, Wt::WLength > >;
 template class C2Python_ref< Wt::Signal< std::string > >;
 template class C2Python_ref< Wt::Signal< bool > >;
 template class C2Python_ref< Wt::Signal< int > >;
-template class C2Python_ref< Wt::Signal< long long > >;
+//template class C2Python_ref< Wt::Signal< long long > >;
 template class C2Python_ref< Wt::Signal< double > >;
 template class C2Python_ref< Wt::Signal< int, int > >;
+template class C2Python_ref< Wt::Signal< int64_t > >;
 template class C2Python_ref< Wt::Signal< int64_t, int64_t > >;
 template class C2Python_ref< Wt::Signal< uint64_t, uint64_t > >;
 #ifndef _LP64
