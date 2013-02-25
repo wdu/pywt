@@ -7,20 +7,16 @@ ADD_LIBRARY(wtmodule SHARED
 		http/HttpConversions.cpp
 		http/HttpWrappers1.cpp
 		http/PyHttp.cpp
-		../generated/wt/http/gwthttp_Strings.cpp
 
 		chart/ChartShells.cpp
 		chart/ChartConversions.cpp
 		chart/ChartWrappers1.cpp
 		chart/PyChart.cpp
-		../generated/wt/chart/gwtchart_Strings.cpp
 
 		WtShells.cpp
 		Threading.cpp
 		WtSpecialConversion.cpp
 		WtConversions.cpp
-		../generated/wt/gwt_Strings.cpp
-		../generated/wt/gwt_Compare.cpp
 		WtWrappers1.cpp
 		WtWrappers2.cpp
 		WtWrappers3.cpp
@@ -44,9 +40,9 @@ ADD_LIBRARY(wtmodule SHARED
 #		WtString.cpp
 #		WtUnicode.cpp
 		)
+ADD_DEPENDENCIES(wtmodule generate_bindings)
 
-
-TARGET_LINK_LIBRARIES(wtmodule ${Wt_LIBRARY} ${PYTHON_LIBRARY} boost_signals-mt)
+TARGET_LINK_LIBRARIES(wtmodule ${Wt_LIBRARY} ${PYTHON_LIBRARY} ${Boost_SIGNALS_LIBRARY})
 
 SET_TARGET_PROPERTIES(wtmodule PROPERTIES
 		OUTPUT_NAME Wt 

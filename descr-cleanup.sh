@@ -1,5 +1,5 @@
 # These files don't work well with the python scripts
-rm out/WGLWidget.cl out/WRasterImage.cl out/WVmlImage.cl out/WSvgImage.cl out/*Exception.cl out/JSignal.cl out/JSon/ParseError.cl out/WIOService.cl out/Signal.cl out/WServer.cl out/Http/Client.cl out/WEvent.cl out/SignalArgTraits.cl out/Http/Message.cl out/Http/WtClient.cl out/WMatrix4x4.cl out/WStringStream.cl
+rm descr/WGLWidget.cl descr/WRasterImage.cl descr/WVmlImage.cl descr/WSvgImage.cl descr/*Exception.cl descr/JSignal.cl descr/JSon/ParseError.cl descr/WIOService.cl descr/Signal.cl descr/WServer.cl descr/Http/Client.cl descr/WEvent.cl descr/SignalArgTraits.cl descr/Http/Message.cl descr/Http/WtClient.cl descr/WMatrix4x4.cl descr/WStringStream.cl
 
 # istream to python? uh-oh...
-rm out/WStreamResource.cl out/WFileResource.cl
+rm descr/WStreamResource.cl descr/WFileResource.cl

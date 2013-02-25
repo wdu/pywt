@@ -769,6 +769,8 @@ def generatePyObject(c):
 	f.write("#include \"PyCPPClassType.h\"\n")
 	if c.include_extra_decl: f.write("#include \"%s\"\n" % c.include_extra_decl)
 	f.write("\n\n")
+	f.write("template <>\n")
+	f.write("PyCPPClassType< %s >* PyCPPClassType< %s >::Type;\n\n\n" % (c.fullCoreName(), c.fullCoreName()))
 	f.write("class Py%s: public PyCPPClassType< %s > {\n" % (c.name, c.fullCoreName()))
 	f.write("\tpublic:\n")
 	if c.base:
@@ -835,7 +837,7 @@ def generatePyObject(c):
 			f.write("\t\t\textern const char* doc_member_%s_%s;\n" % (escapeName(c.fullCoreName()), escapeName(m.name)))
 	f.write("\n")
 	if c.base:
-		f.write("const PyTypeObject* Py%s::bases[%d];" % (c.name, len(c.base)+1));
+		f.write("const PyTypeObject* Py%s::bases[%d];\n" % (c.name, len(c.base)+1));
 	f.write("template <>\n")
 	f.write("PyCPPClassType< %s >* PyCPPClassType< %s >::Type = 0;\n\n\n" % (c.fullCoreName(), c.fullCoreName()))
 	if c.base:

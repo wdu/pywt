@@ -2,6 +2,7 @@
 ADD_LIBRARY(wthttpmodule SHARED
 		wthttpmodule.cpp
 		)
+ADD_DEPENDENCIES(wthttpmodule generate_bindings)
 
 TARGET_LINK_LIBRARIES(wthttpmodule ${PYTHON_LIBRARY} ${Wt_HTTP_LIBRARY})
 

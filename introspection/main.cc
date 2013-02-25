@@ -481,8 +481,8 @@ void dumpClass(CXCursor cursor, VisitorContext *c, bool inner)
     std::string subdir;
     if (begin + 4 < end)
       subdir = header.substr(begin + 4, end - begin - 4);
-    mkdir(("out/" + subdir).c_str(), 0777);
-    co = new std::ofstream(("out/" + subdir + "/" + classname + ".cl").c_str());
+    mkdir(("descr/" + subdir).c_str(), 0777);
+    co = new std::ofstream(("descr/" + subdir + "/" + classname + ".cl").c_str());
   } else {
     co = &c->o;
   }
@@ -518,8 +518,8 @@ void dumpEnum(CXCursor cursor, VisitorContext *c)
   std::string subdir;
   if (begin + 4 < end)
     subdir = header.substr(begin + 4, end - begin - 4);
-  mkdir(("out/" + subdir).c_str(), 0777);
-  std::ofstream co(("out/" + subdir + "/" + enumname + ".cl").c_str());
+  mkdir(("descr/" + subdir).c_str(), 0777);
+  std::ofstream co(("descr/" + subdir + "/" + enumname + ".cl").c_str());
   co << "# Generated Python script for enum " << enumname << std::endl;
   co << "from CClass import *\n";
   co << "e = Enum(\"" << enumname << "\"";

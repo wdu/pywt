@@ -10,6 +10,12 @@
 #include "PythonApplication.h"
 #include "Threading.h"
 
+// Avoid to have to deal with these in cmake
+#include "../generated/wt/http/gwthttp_Strings.cpp"
+#include "../generated/wt/chart/gwtchart_Strings.cpp"
+#include "../generated/wt/gwt_Strings.cpp"
+#include "../generated/wt/gwt_Compare.cpp"
+
 PyObject* init();
 PyObject* Httpinit();
 PyObject* Chartinit();
