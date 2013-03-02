@@ -20,15 +20,15 @@ INCLUDE_DIRECTORIES(
   ${CMAKE_BINARY_DIR}/llvm-prefix/install/include
 )
 
-LINK_DIRECTORIES(
-  ${CMAKE_BINARY_DIR}/llvm-prefix/install/lib
-)
-
 ADD_EXECUTABLE(python_dump
   main.cc
 )
 target_link_libraries(python_dump
-  clang
+  ${CLANG_LIBRARIES}
+)
+SET_TARGET_PROPERTIES(python_dump
+  PROPERTIES
+    SKIP_BUILD_RPATH OFF
 )
 
 add_dependencies(python_dump llvm)

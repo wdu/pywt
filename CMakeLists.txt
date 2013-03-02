@@ -10,8 +10,6 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 INCLUDE(cmake/WtFindBoost.txt)
 
-SET(Wt_LIBRARY ${CMAKE_BINARY_DIR}/wt-prefix/install/lib/libwt.dylib)
-SET(Wt_HTTP_LIBRARY ${CMAKE_BINARY_DIR}/wt-prefix/install/lib/libwthttp.dylib)
 
 #For now, we want to be sure that we link against the right llvm with our
 #custom modifications
@@ -26,7 +24,20 @@ INCLUDE(ExternalProject)
 ExternalProject_add(llvm
         SOURCE_DIR "${CMAKE_SOURCE_DIR}/llvm"
         CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>/install"
+#          "-DBUILD_SHARED_LIBS=OFF"
 )
+
+IF (WIN32)
+  SET(CLANG_LIBRARIES
+    OPTIMIZED ${CMAKE_BINARY_DIR}/llvm-prefix/install/lib/clang.lib
+    DEBUG ${CMAKE_BINARY_DIR}/llvm-prefix/install/lib/clangd.lib
+  )
+ELSE (WIN32)
+  SET(CLANG_LIBRARIES
+    ${CMAKE_BINARY_DIR}/llvm-prefix/install/lib/libclang.dylib
+  )
+ENDIF (WIN32)
+
 
 #For now, we want to be sure that we link against the right wt with our
 #custom modifications
@@ -37,9 +48,32 @@ ENDIF (NOT EXISTS "${CMAKE_SOURCE_DIR}/wt")
 include(ExternalProject)
 ExternalProject_add(wt
 	SOURCE_DIR "${CMAKE_SOURCE_DIR}/wt"
-	CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>/install" "-DDESTDIR=<INSTALL_DIR>/install/ -DSHARED_LIBS=OFF -DPOSITION_INDEPENDEND_CODE=ON"
+	CMAKE_ARGS
+          "-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>/install"
+          "-DDESTDIR=<INSTALL_DIR>/install/"
+# static libs = bad idea; nearly impossible to find out the correct
+# dependencies of the .a file
+#          "-DSHARED_LIBS=OFF"
+#          "-DPOSITION_INDEPENDEND_CODE=ON"
 )
-link_directories(${CMAKE_BINARY_DIR}/wt-prefix/install/lib)
+IF (WIN32)
+  SET(Wt_LIBRARY
+    OPTIMIZED ${CMAKE_BINARY_DIR}/wt-prefix/install/lib/wt.lib
+    DEBUG ${CMAKE_BINARY_DIR}/wt-prefix/install/lib/wtd.lib
+  )
+  SET(Wt_HTTP_LIBRARY
+    OPTIMIZED ${CMAKE_BINARY_DIR}/wt-prefix/install/lib/wthttp.lib
+    DEBUG ${CMAKE_BINARY_DIR}/wt-prefix/install/lib/wthttpd.lib
+  )
+ELSEIF (APPLE)
+  SET(Wt_LIBRARY ${CMAKE_BINARY_DIR}/wt-prefix/install/lib/libwt.dylib)
+  SET(Wt_HTTP_LIBRARY ${CMAKE_BINARY_DIR}/wt-prefix/install/lib/libwthttp.dylib)
+ELSE (APPLE)
+  SET(Wt_LIBRARY ${CMAKE_BINARY_DIR}/wt-prefix/install/lib/libwt.so)
+  SET(Wt_HTTP_LIBRARY ${CMAKE_BINARY_DIR}/wt-prefix/install/lib/libwthttp.so)
+ENDIF (WIN32)
+
+#link_directories(${CMAKE_BINARY_DIR}/wt-prefix/install/lib)
 
 SUBDIRS(introspection)
 
@@ -76,6 +110,8 @@ IF(COMMAND CMAKE_POLICY)
   CMAKE_POLICY(SET CMP0003 OLD)
 ENDIF(COMMAND CMAKE_POLICY)
 
+# Two lines below are required on recent linux to perform checks of missing
+# symbols at compile time
 #SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--as-needed -Wl,-z,defs")
 #SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,--as-needed -Wl,-z,defs")
 
